@@ -6,7 +6,7 @@ require("dotenv").config({ path: ".env" })
 module.exports = new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "https://localhost:5000/api/auth/gmail/authorized"
+        callbackURL: "https://backend-final-project-haibao.herokuapp.com/api/auth/gmail/authorized"
 
     },
     function(accessToken, refreshToken, profile, next) {

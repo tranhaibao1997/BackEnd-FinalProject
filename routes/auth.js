@@ -9,7 +9,7 @@ const passport = require('../oauth/index');
 
 
 //Login 
-router.post("/login", async (req, res, next) => {
+router.post("/login", async(req, res, next) => {
     let { email, password } = req.body
     try {
         let user = await User.comparePassword(email, password)
@@ -31,14 +31,19 @@ router.post("/login", async (req, res, next) => {
     }
 })
 
+router.get("/test", async(req, res) => {
+    let result = await User.find()
+    res.send(result)
+})
+
 //Get current user
-router.get("/me", auth, async (req, res, next) => {
+router.get("/me", auth, async(req, res, next) => {
     res.send(req.user)
 })
 
 
 //change password
-router.patch("/changePassword", auth, async (req, res, next) => {
+router.patch("/changePassword", auth, async(req, res, next) => {
     try {
         let { newPassword } = req.body
         let user = req.user
@@ -61,7 +66,7 @@ router.patch("/changePassword", auth, async (req, res, next) => {
 })
 
 //log out
-router.get("/logOut", auth, async (req, res, next) => {
+router.get("/logOut", auth, async(req, res, next) => {
     try {
         let user = req.user
         user.tokens.splice(user.tokens.length - 1, 1)
@@ -76,7 +81,7 @@ router.get("/facebook/login", passport.authenticate("facebook", { scope: ['email
 router.get("/facebook/authorized", (req, res, next) => {
 
     console.log("Dung link roi")
-    passport.authenticate("facebook", async function (err, profile) {
+    passport.authenticate("facebook", async function(err, profile) {
         try {
             const { email, last_name, first_name } = profile._json
             let user = await User.findOne({ email })
@@ -102,7 +107,8 @@ router.get("/facebook/authorized", (req, res, next) => {
 
 router.get("/gmail/login", passport.authenticate('google', {
     scope: ['https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/userinfo.email']
+        'https://www.googleapis.com/auth/userinfo.email'
+    ]
 }))
 
 
@@ -111,8 +117,8 @@ router.get("/gmail/login", passport.authenticate('google', {
 router.get("/gmail/authorized", (req, res, next) => {
 
     console.log("Dung link roi")
-    passport.authenticate("google", async function (err, profile) {
-        
+    passport.authenticate("google", async function(err, profile) {
+
         try {
             const { email, given_name, family_name } = profile._json
             let user = await User.findOne({ email })
