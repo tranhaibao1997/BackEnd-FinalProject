@@ -3,6 +3,7 @@ var router = express.Router();
 const bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
+const Profile = require('../models/Profile');
 
 
 //Create User
@@ -40,6 +41,32 @@ router.post("/register", [
             })
             await newUser.save()
             token = await newUser.generateToken()
+                // let profile = new Profile({
+                //     userId: newUser._id,
+                //     aboutMe: "",
+
+            //     livesIn: "",
+            //     birthPlace: "",
+            //     occupation: "",
+            //     status: "",
+            //     phoneNumber: "",
+            //     personalWebsite: "",
+            //     friendList: [],
+            //     sendFriendRequest: [],
+            //     recieveFriendRequest: [],
+            //     follower: [],
+            //     following: [],
+            //     activities: [],
+            //     skill: [],
+            //     social: {},
+            //     experience: [],
+            //     education: [],
+            //     allHobbies: {},
+            //     post: []
+
+
+            // })
+            // await profile.save()
 
             res.status(201).send({
                 data: {
@@ -53,6 +80,7 @@ router.post("/register", [
                 message: "Success ^^"
             })
         } catch (err) {
+            console.log(err)
             res.status(400).send({
                 errors: err,
                 message: "Something went wrong!"

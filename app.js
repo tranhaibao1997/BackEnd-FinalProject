@@ -11,8 +11,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth')
 var profileRouter = require('./routes/profile')
+var postRouter = require("./routes/post")
 const cors = require('cors')
-require("dotenv").config();
 
 
 var app = express();
@@ -41,6 +41,8 @@ app.use('/api/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/profile', profileRouter);
+app.use('/api/post', postRouter)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -81,7 +83,15 @@ let errorController = (err, req, res, next) => {
 }
 app.use(errorController)
 
-
-
+const multer = require('multer')
+const upload = multer({
+    dest: 'images',
+    limits: {
+        fileSize: 1000000
+    }
+})
+app.post("/upload", upload.single(), (req, res) => {
+    res.send("OK")
+})
 
 module.exports = app;

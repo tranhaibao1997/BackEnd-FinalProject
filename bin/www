@@ -21,7 +21,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer({
+var server = httpher.createServer({
         key: fs.readFileSync(path.join(__dirname, "server.key")),
         cert: fs.readFileSync(path.join(__dirname, "server.cert"))
     },

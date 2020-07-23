@@ -24,42 +24,20 @@ const ProfileSchema = new mongoose.Schema({
     phoneNumber: String,
     personalWebsite: String,
     friendList: [{
-        friendId: {
-            type: mongoose.Schema.ObjectId,
-            ref: "profile"
-        }
-
+        type: mongoose.Schema.ObjectId,
+        ref: "user"
     }],
     joinDay: {
         type: Date,
         default: Date.now()
     },
-    sendFriendRequest: [{
-        friendId: {
-            type: mongoose.Schema.ObjectId,
-            ref: "profile"
-        }
+    friendRequestSent: [{
+        type: mongoose.Schema.ObjectId,
+        ref: "user"
     }],
-    recieveFriendRequest: [{
-        friendId: {
-            type: mongoose.Schema.ObjectId,
-            ref: "profile"
-        }
-    }],
-    follower: [{
-        friendId: {
-            type: mongoose.Schema.ObjectId,
-            ref: "profile"
-        }
-    }],
-    following: [{
-        friendId: {
-            type: mongoose.Schema.ObjectId,
-            ref: "profile"
-        }
-    }],
-    activities: [{
-        activityId: mongoose.Schema.ObjectId
+    friendRequestPending: [{
+        type: mongoose.Schema.ObjectId,
+        ref: "user"
     }],
     skill: {
         type: [String]
@@ -76,30 +54,13 @@ const ProfileSchema = new mongoose.Schema({
         },
     },
     experience: [{
-        jobTitle: {
-            type: String
-        },
-        company: {
-            type: String,
-            required: true
-        },
-        location: {
-            type: String
-        },
-        from: {
-            type: Date,
-            required: true
-        },
-        to: {
-            type: Date
-        },
-        current: {
-            type: Boolean,
-            default: false
-        },
-        description: {
-            type: String
-        }
+        company: String,
+        jobTitle: String,
+        location: String,
+        fromDate: Date,
+        current: Boolean,
+        toDate: Date,
+        description: String,
     }],
 
     education: [{
@@ -120,9 +81,9 @@ const ProfileSchema = new mongoose.Schema({
         favoriteBooks: String,
         favoriteWriters: String,
         otherInterests: String
-        
+
     },
-    post: [Object]
+    uploadedImages: []
 
 
 

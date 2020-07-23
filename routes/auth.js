@@ -12,9 +12,20 @@ const passport = require('../oauth/index');
 router.post("/login", async(req, res, next) => {
     let { email, password } = req.body
     try {
-        let user = await User.comparePassword(email, password)
+        let user = await User.findOne({ email: email })
+        if (!user) {
+            //dont need to send, just throw Error
+            res.status(400).send({ message: "Cant not find the user" })
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password)
+
+
+        if (!isMatch) {
+            res.status(400).send({ message: "Wrong password, please provide a new one" })
+        }
         let token = await user.generateToken()
-        console.log(token)
+
         res.send({
             data: {
                 _id: user._id,
@@ -27,13 +38,8 @@ router.post("/login", async(req, res, next) => {
             message: "Success"
         })
     } catch (err) {
-        res.send(err)
+        res.status(404).send(err)
     }
-})
-
-router.get("/test", async(req, res) => {
-    let result = await User.find()
-    res.send(result)
 })
 
 //Get current user
@@ -66,13 +72,16 @@ router.patch("/changePassword", auth, async(req, res, next) => {
 })
 
 //log out
-router.get("/logOut", auth, async(req, res, next) => {
+router.get("/logout", auth, async(req, res, next) => {
     try {
-        let user = req.user
-        user.tokens.splice(user.tokens.length - 1, 1)
-        await user.save()
+        let token = req.query.token
+        let index = req.user.tokens.findIndex(elm => elm == token)
+        console.log(index)
+        req.user.tokens.splice(token, 1)
+        await req.user.save()
+        res.send("Log out successful")
     } catch (err) {
-
+        console.log(err)
     }
 })
 

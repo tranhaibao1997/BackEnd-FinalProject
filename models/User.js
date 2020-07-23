@@ -26,12 +26,31 @@ const userSchema = new mongoose.Schema({
         type: String,
 
     },
+    avatar: {
+        type: String,
+        default: "https://futbolita.com/wp-content/uploads/2008/11/avatar-1577909_960_720.png"
+
+    },
+    banner: {
+        type: String,
+        default: "https://versohydraulic.com/bitrix/templates/aspro-scorp/images/default-banner.jpg"
+    },
     dob: {
         type: Date,
         // required: [true, "Must enter your day of birth"]
     },
     gender: {
         type: String,
+    },
+    location: {
+        longtitude: {
+            type: String,
+            default: "0"
+        },
+        latitude: {
+            type: String,
+            default: "0"
+        },
     },
     tokens: [{
             type: String
@@ -62,9 +81,9 @@ userSchema.statics.comparePassword = async function(email, password) {
             //dont need to send, just throw Error
             throw new Error("Cant not find the user")
         }
-        console.log(user.password)
+
         const isMatch = await bcrypt.compare(password, user.password)
-        console.log(isMatch)
+
 
         if (!isMatch) {
             throw new Error("Wrong password, please provide a new one")
@@ -72,7 +91,7 @@ userSchema.statics.comparePassword = async function(email, password) {
         return user
 
     } catch (err) {
-        console.log(err)
+        return err.message
     }
 
 
